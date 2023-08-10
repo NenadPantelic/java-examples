@@ -47,11 +47,27 @@ public class Main {
         // Path.of - as of Java 11, this method should be used
         final String filePath = "/home/nenad/Documents/Learning/java-learning-examples/01-file-api/README.md";
         path = Path.of(filePath);
-        doesFileExist(path);
-        getLastModificationDate(path);
-        printOwnerOfTheFile(path);
 
+        // does the file exist
+        System.out.println(Files.exists(path));
+        // get last time modified
+        FileTime lastModifiedTime = Files.getLastModifiedTime(path);
+        System.out.println("lastModifiedTime = " + lastModifiedTime);
+
+        // get owner of the file
+        UserPrincipal owner = Files.getOwner(path);
+        System.out.println("owner = " + owner);
+
+        // Java 12+
+        // compare files
+        // long mismatchIndex = Files.mismatch(path, Paths.get("/some/path/file.txt"));
+        // System.out.println("mismatch = " + mismatchIndex);
+        // returns position of the mismatch (fist byte that differs)
+
+        // create files/directories
         createFiles(path.getParent());
+
+        // get posix permissions (for Unix-based systems)
         printPosixPermissions(filePath);
     }
     /*
@@ -66,29 +82,6 @@ public class Main {
     *  redirects to Path.of.
     *
     * */
-
-    public static void doesFileExist(Path path) {
-        System.out.println(Files.exists(path));
-    }
-
-
-    public static void getLastModificationDate(Path path) throws IOException {
-        FileTime lastModifiedTime = Files.getLastModifiedTime(path);
-        System.out.println("lastModifiedTime = " + lastModifiedTime);
-    }
-
-    // Java 12+
-    public static long compareFiles(Path path) {
-        // long mismatchIndex = Files.mismatch(path, Paths.get("/some/path/file.txt"));
-        // System.out.println("mismatch = " + mismatchIndex);
-        // returns position of the mismatch (fist byte that differs)
-        return 0L;
-    }
-
-    public static void printOwnerOfTheFile(Path path) throws IOException {
-        UserPrincipal owner = Files.getOwner(path);
-        System.out.println("owner = " + owner);
-    }
 
 
     // create temp file
@@ -122,7 +115,7 @@ public class Main {
     }
 
     // for Unix-based systems (Linux, macOS)
-    public static void printPosixPermissions(final String filePath){
+    public static void printPosixPermissions(final String filePath) {
         Path path = Path.of(filePath);
         try {
             Set<PosixFilePermission> permissions = Files.getPosixFilePermissions(path);
