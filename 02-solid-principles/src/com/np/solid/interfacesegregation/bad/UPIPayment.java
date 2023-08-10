@@ -1,0 +1,11 @@
+package com.np.solid.interfacesegregation.bad;
+
+// do not force any client to implement an interface which is irrelevant to them
+public interface UPIPayment {
+
+    void payMoney();
+
+    void getScratchCard();
+
+    void getCashBackAsCreditBalance();
+}
